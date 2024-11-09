@@ -27,7 +27,7 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => ['required', 'string', 'email'],
+            'email' => ['required', 'string'],
             'password' => ['required', 'string'],
         ];
     }
@@ -41,7 +41,19 @@ class LoginRequest extends FormRequest
     {
         $this->ensureIsNotRateLimited();
 
-        if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
+        // Get the login credentials
+        $credentials = $this->only('password');
+        $login = $this->input('email'); // Here, 'email' input can contain either email or username
+
+        // Check if the input is an email or a username
+        if (filter_var($login, FILTER_VALIDATE_EMAIL)) {
+            $credentials['email'] = $login;
+        } else {
+            $credentials['Name'] = $login;
+        }
+
+        // Attempt login with either email or username
+        if (! Auth::attempt($credentials, $this->boolean('remember'))) {
             RateLimiter::hit($this->throttleKey());
 
             throw ValidationException::withMessages([
@@ -51,6 +63,7 @@ class LoginRequest extends FormRequest
 
         RateLimiter::clear($this->throttleKey());
     }
+
 
     /**
      * Ensure the login request is not rate limited.

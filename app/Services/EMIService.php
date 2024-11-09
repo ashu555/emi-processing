@@ -12,6 +12,8 @@ class EMIService
     protected $loanRepository;
     protected $loanService;
 
+
+     // Constructor to initialize the dependencies
     public function __construct(
         EMIRepositoryInterface $emiRepository,
         LoanRepositoryInterface $loanRepository,
@@ -22,9 +24,11 @@ class EMIService
         $this->loanService = $loanService;
     }
 
+
+    // Main method to process EMI data
     public function processEMIData()
     {
-        // Get month columns
+        // Get month columns that represent the payment months
         $columns = $this->loanService->getMonthColumns();
         
         // Create EMI table
@@ -32,6 +36,8 @@ class EMIService
         
         // Process each loan
         $loans = $this->loanRepository->getAllLoans();
+
+       // Loop through each loan to process EMI data for it
         foreach ($loans as $loan) {
             $this->processLoanEMI($loan, $columns);
         }

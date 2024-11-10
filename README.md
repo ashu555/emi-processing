@@ -9,11 +9,11 @@ Follow these steps to set up the project locally.
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/your-username/your-repo.git
+   git clone https://github.com/ashu555/emi-processing.git
 
 2. **Move to cloned repo directory**
    ```bash
-   cd your-repo
+   cd emi-processing
 
 3. **Copy .env.example to .env**
    ```bash
